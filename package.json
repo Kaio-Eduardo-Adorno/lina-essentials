@@ -1,5 +1,5 @@
 {
-  "name": "my-lib",
+  "name": "lina-essentials",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -7,7 +7,9 @@
     "preview": "vite preview",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\"",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs-build",
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages --existing-output-dir=storybook-static --ci",
+    "deploy-storybook-manual": "npm run build-storybook && sed -i s=/assets/=/lina-essentials/assets/=g 'storybook-static/iframe.html' && npm run deploy-storybook",
     "lint": "npx eslint src",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
@@ -28,6 +30,7 @@
     "@storybook/addon-links": "6.5.15",
     "@storybook/builder-vite": "^0.2.6",
     "@storybook/react": "6.5.15",
+    "@storybook/storybook-deployer": "^2.8.16",
     "@types/node": "17.0.23",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
@@ -67,5 +70,7 @@
       "import": "./dist/my-lib.es.js",
       "require": "./dist/my-lib.umd.js"
     }
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "lina-essentials@0.0.0"
 }
