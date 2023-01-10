@@ -2,10 +2,16 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [
     react(),
+    svgr({
+      svgrOptions: {
+        replaceAttrValues: { black: '{props.color}' },
+      },
+    }),
     dts({
       insertTypesEntry: true,
     }),
