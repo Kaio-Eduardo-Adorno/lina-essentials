@@ -1,1 +1,2 @@
-export { default as MyButton } from './components/MyButton';
+import * as Icons from './icons';
+export { Icons };
