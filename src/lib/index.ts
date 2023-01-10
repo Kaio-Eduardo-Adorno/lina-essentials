@@ -1,2 +1,2 @@
-import * as Icons from './icons';
-export { Icons };
+export { default as Icon } from './components/Icon';
+export { default as Button } from './components/Button';
