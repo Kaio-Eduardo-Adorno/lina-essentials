@@ -1,5 +1,5 @@
-import { Icons } from '../..';
-console.log(Object.keys(Icons));
+import * as Icons from '../../icons';
+// console.log(Object.keys(Icons));
 export const iconsList = [
   'align_left',
   'apps',
