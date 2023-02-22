@@ -2,9 +2,6 @@ import { ComponentMeta, ComponentStoryObj } from '@storybook/react';
 import Button from '.';
 import Icon from '../Icon';
 
-import { ThemeProvider } from 'styled-components';
-import { defaultTheme } from '../../provider/ThemeProvider';
-
 const meta: ComponentMeta<typeof Button> = {
   title: 'Lina Essentials/Button',
   component: Button,
@@ -14,13 +11,7 @@ const meta: ComponentMeta<typeof Button> = {
       control: { type: 'select' },
     },
   },
-  decorators: [
-    (Story) => (
-      <ThemeProvider theme={defaultTheme}>
-        <Story />
-      </ThemeProvider>
-    ),
-  ],
+  decorators: [(Story) => <Story />],
 };
 export default meta;
 
