@@ -1,18 +1,25 @@
 import styled from 'styled-components';
-import MyButton from './lib/components/MyButton';
+import { Button } from './lib';
+import Select from './lib/components/Select';
+import CustomThemeProvider, { useTheme } from './lib/provider/ThemeProvider';
+import { themes } from './lib/themes';
 
 function App() {
+  const { toggleTheme } = useTheme();
   return (
-    <Wrapper>
-      <MyButton>Click me</MyButton>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Button styleType={'primary'} onClick={() => toggleTheme('spi')}>
+          Primary
+        </Button>
+      </Wrapper>
+    </>
   );
 }
 
 const Wrapper = styled.div`
-  margin: 2rem;
-  display: flex;
-  justify-content: center;
+  padding: 2rem;
+  background-color: #f0f0f1;
 `;
 
 export default App;
