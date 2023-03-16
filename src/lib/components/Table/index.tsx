@@ -1,6 +1,6 @@
 import { flatten } from 'flat';
 import { useEffect, useState } from 'react';
-import Button from '../Button';
+import { PrimaryButton, SecondaryButton } from '../Button';
 import Icon from '../Icon';
 import {
   TableHeaderColumn,
@@ -94,8 +94,7 @@ const Table = ({
         </TotalItems>
         <PaginationButtons>
           {pageState > 1 && (
-            <Button
-              styleType='secondary'
+            <SecondaryButton
               style={{
                 justifyContent: 'center',
                 padding: '4px 8px',
@@ -105,18 +104,16 @@ const Table = ({
               onClick={() => setPage(pageState - 1)}
             >
               {pageState - 1}
-            </Button>
+            </SecondaryButton>
           )}
-          <Button
-            styleType='primary'
+          <PrimaryButton
             style={{ justifyContent: 'center', padding: '4px 8px', height: '24px', width: '24px' }}
             onClick={() => setPage(pageState)}
           >
             {pageState}
-          </Button>
+          </PrimaryButton>
           {itensPerPage * pageState - itensPerPage + data.length !== totalData && (
-            <Button
-              styleType='secondary'
+            <SecondaryButton
               style={{
                 justifyContent: 'center',
                 padding: '4px 8px',
@@ -126,7 +123,7 @@ const Table = ({
               onClick={() => setPage(pageState + 1)}
             >
               {pageState + 1}
-            </Button>
+            </SecondaryButton>
           )}
         </PaginationButtons>
         <ItensPerPageWrapper>
