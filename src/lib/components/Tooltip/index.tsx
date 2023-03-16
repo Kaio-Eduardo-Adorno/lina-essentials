@@ -1,3 +1,4 @@
+import { defaultTheme } from '../../themes';
 import styled from '../../utils/wrapper-styled-components';
 
 export interface Props {
@@ -9,10 +10,10 @@ const ToolTipWrapper = styled('div')`
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   font-family: 'Roboto';
 
-  --balloon-border-radius: 2px;
-  --balloon-color: rgba(16, 16, 16, 0.95);
-  --balloon-text-color: #fff;
-  --balloon-font-size: 12px;
+  --balloon-border-radius: 4px;
+  --balloon-color: ${(props) => props.theme.colors.white};
+  --balloon-text-color: ${(props) => props.theme.colors.primary};
+  --balloon-font-size: ${(props) => props.theme.fontSizes.small};
   --balloon-move: 4px;
 
   div[aria-label][data-balloon-pos] {
@@ -35,10 +36,10 @@ const ToolTipWrapper = styled('div')`
     text-shadow: none;
     font-size: var(--balloon-font-size);
     background: var(--balloon-color);
-    border-radius: 2px;
     color: var(--balloon-text-color);
     border-radius: var(--balloon-border-radius);
     content: attr(aria-label);
+    border: 1px solid ${(props) => props.theme.colors.tertiary};
     padding: 0.5em 1em;
     position: absolute;
     white-space: nowrap;
@@ -215,6 +216,7 @@ const ToolTipWrapper = styled('div')`
     width: 100%;
   }
 `;
+ToolTipWrapper.defaultProps = { theme: defaultTheme };
 
 const ToolTip = ({ text, children }: Props) => {
   return (
