@@ -45,10 +45,10 @@ Text.args = flatten(
   {
     label: {
       text: 'fffff',
+      tooltip: 'teste tooltip',
     },
-    leftIcon: { icon: 'eye', fill: '#8667EC', size: 22 },
-    rightIcon: { icon: 'eye', fill: '#8667EC', size: 22 },
-    type: 'number',
+    leftIcon: { icon: 'eye', size: 22 },
+    rightIcon: { icon: 'eye', size: 22 },
   },
   { delimiter },
 );
