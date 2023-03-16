@@ -2,6 +2,8 @@ import { defaultTheme } from '../../themes';
 import styled from '../../utils/wrapper-styled-components';
 
 export const Label = styled('label')`
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  font-family: 'Roboto';
   display: flex;
   gap: 8px;
   align-items: center;
@@ -14,19 +16,6 @@ export const Label = styled('label')`
 `;
 Label.defaultProps = { theme: defaultTheme };
 
-export const Input = styled('input')`
-  border: none;
-  background: none;
-  outline: none;
-  width: 100%;
-  font-size: ${(props) => props.theme.fontSizes.default};
-  color: ${(props) => props.theme.colors.darkGray};
-  ::placeholder {
-    color: ${(props) => props.theme.colors.gray};
-  }
-`;
-Input.defaultProps = { theme: defaultTheme };
-
 export const InputWrapper = styled('div')`
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   font-family: 'Roboto';
@@ -36,7 +25,7 @@ export const InputWrapper = styled('div')`
 `;
 InputWrapper.defaultProps = { theme: defaultTheme };
 
-export interface InputContainerProps {
+interface InputContainerProps {
   disabled: boolean;
   readOnly: boolean;
 }
@@ -62,21 +51,15 @@ export const InputContainer = styled('label')<InputContainerProps>`
 `;
 InputContainer.defaultProps = { theme: defaultTheme };
 
-export const ToolTipWrapper = styled('div')`
-  position: relative;
+export const Input = styled('input')`
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-size: ${(props) => props.theme.fontSizes.default};
+  color: ${(props) => props.theme.colors.darkGray};
+  ::placeholder {
+    color: ${(props) => props.theme.colors.gray};
+  }
 `;
-
-export const ToolTipButton = styled('div')`
-  border-radius: 100%;
-  background-color: ${(props) => props.theme.colors.gray};
-  width: 12px;
-  height: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: ${(props) => props.theme.colors.white};
-  font-size: 8px;
-  line-height: normal;
-  cursor: pointer;
-`;
-ToolTipButton.defaultProps = { theme: defaultTheme };
+Input.defaultProps = { theme: defaultTheme };

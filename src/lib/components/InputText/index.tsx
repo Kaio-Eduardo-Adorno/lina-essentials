@@ -1,13 +1,7 @@
 import Icon, { Props as IconProps } from '../Icon';
 import ToolTip from '../Tooltip';
-import {
-  Input,
-  InputContainer,
-  InputWrapper,
-  Label,
-  ToolTipButton,
-  ToolTipWrapper,
-} from './index.style';
+import { InputContainer, InputWrapper, Label, Input } from './index.style';
+import { ToolTipButton, ToolTipWrapper } from '../LabelTooltip';
 
 export interface Props {
   leftIcon: IconProps;
