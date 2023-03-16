@@ -5,11 +5,11 @@ export interface Props {
 }
 
 export const ModalWrapper = styled('div')<Props>`
-  font-size: 14px;
-  line-height: 16px;
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   font-family: 'Roboto';
-  color: #666666;
+
+  font-size: ${(props) => props.theme.fontSizes.medium};
+  color: ${(props) => props.theme.colors.darkGray};
 
   position: fixed;
   top: 0;
@@ -22,9 +22,9 @@ export const ModalWrapper = styled('div')<Props>`
   opacity: ${(props) => (props.open ? '1' : '0')};
   pointer-events: ${(props) => (props.open ? 'all' : 'none')};
   background-color: rgba(0, 0, 0, 0.5);
-
   transition: opacity linear 0.25s;
 `;
+ModalWrapper.defaultProps = { theme: defaultTheme };
 
 export const ModalContainer = styled('div')<Props>`
   background: #ffffff;
@@ -33,22 +33,28 @@ export const ModalContainer = styled('div')<Props>`
   padding: 20px;
   width: 230px;
 `;
+ModalContainer.defaultProps = { theme: defaultTheme };
 
 export const ModalHeader = styled('div')`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #dfdfdf;
+  border-bottom: 1px solid ${(props) => props.theme.colors.lightGray};
   padding-bottom: 16px;
   margin-bottom: 16px;
 `;
+ModalHeader.defaultProps = { theme: defaultTheme };
 
 export const ModalHeaderTitle = styled('div')`
   display: flex;
-  font-size: 22px;
-  line-height: 26px;
-  color: #212121;
+  align-items: center;
+  font-size: ${(props) => props.theme.fontSizes.giant};
+  color: ${(props) => props.theme.colors.black};
 `;
+ModalHeaderTitle.defaultProps = { theme: defaultTheme };
+
 export const ModalHeaderX = styled('div')`
+  display: flex;
+  align-items: center;
   color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
   &:hover {
