@@ -20,11 +20,22 @@ declare module 'styled-components' {
     colors: {
       primary: string;
       secondary: string;
+      tertiary: string;
+      quaternary: string;
+      background: string;
+      black: string;
+      darkGray: string;
+      gray: string;
+      lightGray: string;
+      white: string;
     };
-    buttons: {
-      [key: string]: ButtonTheme;
-      // primary: ButtonTheme;
-      // secondary: ButtonTheme;
+    fontSizes: {
+      mini: string;
+      small: string;
+      medium: string;
+      default: string;
+      large: string;
+      giant: string;
     };
   }
 }
