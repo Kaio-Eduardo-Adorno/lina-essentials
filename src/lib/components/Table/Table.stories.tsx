@@ -15,22 +15,42 @@ export const TableStory: ComponentStoryObj<typeof Table> = {
     data: [
       {
         a: 'teste',
-        b: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        b: 'aaaaaaaaaa',
       },
       {
         a: 'teste',
-        b: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        b: 'teste true',
       },
       {
         a: 'teste',
-        b: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        b: 'aaaaaaaaaaaaa',
+      },
+      {
+        a: 'teste',
+        b: 'aaaaaaaaaaaaa',
+      },
+      {
+        a: 'teste',
+        b: 'aaaaaaaaaaaaa',
       },
     ],
-    headers: [{ key: 'b', label: 'a' }],
-    onDelete(rowData) {
-      console.log(rowData);
-
-      return;
-    },
+    headers: [
+      { key: 'b', label: 'b' },
+      { key: 'a', label: 'a' },
+    ],
+    actions: [
+      {
+        icon: 'trash',
+        tooltip: 'teste message',
+        showCondition: (rowData) => {
+          const row = rowData as { a: string; b: string };
+          if (row.b === 'aaaaaaaaaa') return false;
+          return true;
+        },
+        action: (rowData) => {
+          console.log(rowData);
+        },
+      },
+    ],
   },
 };

@@ -75,6 +75,8 @@ export const iconsList = [
   'x',
 ] as const;
 
+export type IconType = typeof iconsList[number];
+
 export interface Props extends React.SVGProps<SVGSVGElement> {
   icon: typeof iconsList[number];
   size: string | number;

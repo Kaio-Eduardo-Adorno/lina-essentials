@@ -1,7 +1,7 @@
 import { flatten } from 'flat';
 import { useEffect, useState } from 'react';
-import { PrimaryButton, SecondaryButton } from '../Button';
-import Icon from '../Icon';
+import Icon, { IconType } from '../Icon';
+import ToolTip from '../Tooltip';
 import {
   TableHeaderColumn,
   TableRow,
@@ -16,6 +16,8 @@ import {
   PaginationButtons,
   ItensPerPageWrapper,
   ItensPerPageSelect,
+  PrimaryPaginationButton,
+  SecondaryPaginationButton,
 } from './index.style';
 
 export interface TableProps {
@@ -23,27 +25,37 @@ export interface TableProps {
   data: { [key: string]: unknown }[];
   totalData: number;
   itensPerPage: number;
+  initialPage: number;
   onPageChange?: (page: number) => void;
-  onEdit?: (rowData: unknown) => void;
-  onView?: (rowData: unknown) => void;
-  onDelete?: (rowData: unknown) => void;
+  onItensPerPageChange?: (itensPerPage: number) => void;
+  initialItensPerPage?: 5 | 10 | 25 | 50 | 100;
+  actions?: {
+    icon: IconType;
+    tooltip: string;
+    action: (rowData: unknown) => void;
+    showCondition?: (rowData: unknown) => boolean;
+  }[];
 }
 
 const Table = ({
   headers,
   data,
-  onEdit,
-  onView,
-  onDelete,
   onPageChange,
-  totalData = 3,
+  onItensPerPageChange,
+  initialItensPerPage,
+  totalData,
+  actions,
 }: TableProps) => {
   const [pageState, setPage] = useState(1);
-  const [itensPerPage, setItensPerPage] = useState(5);
+  const [itensPerPage, setItensPerPage] = useState<number>(initialItensPerPage || 5);
 
   useEffect(() => {
     if (onPageChange) onPageChange(pageState);
   }, [onPageChange, pageState]);
+
+  useEffect(() => {
+    if (onItensPerPageChange) onItensPerPageChange(itensPerPage);
+  }, [onItensPerPageChange, itensPerPage]);
 
   return (
     <TableWrapper>
@@ -56,7 +68,9 @@ const Table = ({
                   {header.label}
                 </TableHeaderColumn>
               ))}
-              {(onEdit || onView || onDelete) && <TableHeaderColumn scope='col' />}
+              {typeof actions?.length === 'number' && actions?.length > 0 && (
+                <TableHeaderColumn scope='col' />
+              )}
             </tr>
           </thead>
           <tbody>
@@ -72,12 +86,17 @@ const Table = ({
                     </TableCell>
                   ))}
 
-                  {(onEdit || onView || onDelete) && (
+                  {typeof actions?.length === 'number' && actions?.length > 0 && (
                     <ActionButtons>
                       <ActionButtonsContainer>
-                        {onView && <Icon icon='eye' size={20} onClick={onView} />}
-                        {onEdit && <Icon icon='pencil' size={20} onClick={onEdit} />}
-                        {onDelete && <Icon icon='trash' size={20} onClick={onDelete} />}
+                        {actions?.map((action, i) => {
+                          if (action?.showCondition && action?.showCondition(item))
+                            return (
+                              <ToolTip text={action.tooltip} position='left' key={i}>
+                                <Icon icon={action.icon} size={20} onClick={action.action} />
+                              </ToolTip>
+                            );
+                        })}
                       </ActionButtonsContainer>
                     </ActionButtons>
                   )}
@@ -89,41 +108,27 @@ const Table = ({
       </TableContentWrapper>
       <TableOptions>
         <TotalItems>
-          {itensPerPage * pageState - itensPerPage + 1} -{' '}
-          {itensPerPage * pageState - itensPerPage + data.length} de {totalData} lançamentos
+          <>
+            {itensPerPage * pageState - itensPerPage + 1} -{' '}
+            {itensPerPage * pageState - itensPerPage + data.length} {totalData && `de ${totalData}`}{' '}
+            itens
+          </>
         </TotalItems>
+
         <PaginationButtons>
           {pageState > 1 && (
-            <SecondaryButton
-              style={{
-                justifyContent: 'center',
-                padding: '4px 8px',
-                height: '24px',
-                width: '24px',
-              }}
-              onClick={() => setPage(pageState - 1)}
-            >
+            <SecondaryPaginationButton onClick={() => setPage(pageState - 1)}>
               {pageState - 1}
-            </SecondaryButton>
+            </SecondaryPaginationButton>
           )}
-          <PrimaryButton
-            style={{ justifyContent: 'center', padding: '4px 8px', height: '24px', width: '24px' }}
-            onClick={() => setPage(pageState)}
-          >
+          <PrimaryPaginationButton onClick={() => setPage(pageState)}>
             {pageState}
-          </PrimaryButton>
-          {itensPerPage * pageState - itensPerPage + data.length !== totalData && (
-            <SecondaryButton
-              style={{
-                justifyContent: 'center',
-                padding: '4px 8px',
-                height: '24px',
-                width: '24px',
-              }}
-              onClick={() => setPage(pageState + 1)}
-            >
+          </PrimaryPaginationButton>
+          {((totalData && itensPerPage * pageState - itensPerPage + data.length !== totalData) ||
+            data.length === itensPerPage) && (
+            <SecondaryPaginationButton onClick={() => setPage(pageState + 1)}>
               {pageState + 1}
-            </SecondaryButton>
+            </SecondaryPaginationButton>
           )}
         </PaginationButtons>
         <ItensPerPageWrapper>
