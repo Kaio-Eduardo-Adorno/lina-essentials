@@ -24,7 +24,6 @@ export interface TableProps {
   headers: { key: string; label: string; format?: (toFormat: unknown) => string }[];
   data: { [key: string]: unknown }[];
   totalData?: number;
-  itensPerPage: number;
   initialPage?: number;
   onPageChange?: (page: number) => void;
   onItensPerPageChange?: (itensPerPage: number) => void;
