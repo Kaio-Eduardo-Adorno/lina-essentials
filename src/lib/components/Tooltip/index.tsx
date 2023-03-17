@@ -4,6 +4,7 @@ import styled from '../../utils/wrapper-styled-components';
 export interface Props {
   text: string;
   children: any;
+  position?: 'up' | 'down' | 'left' | 'right';
 }
 
 const ToolTipWrapper = styled('div')`
@@ -45,23 +46,8 @@ const ToolTipWrapper = styled('div')`
     white-space: nowrap;
     z-index: 10;
   }
-  [aria-label][data-balloon-pos]:before {
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-top-color: var(--balloon-color);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.18s ease-out 0.18s;
-    content: '';
-    position: absolute;
-    z-index: 10;
-  }
-  [aria-label][data-balloon-pos]:hover:before,
   [aria-label][data-balloon-pos]:hover:after,
-  [aria-label][data-balloon-pos][data-balloon-visible]:before,
   [aria-label][data-balloon-pos][data-balloon-visible]:after,
-  [aria-label][data-balloon-pos]:not([data-balloon-nofocus]):focus:before,
   [aria-label][data-balloon-pos]:not([data-balloon-nofocus]):focus:after {
     opacity: 1;
     pointer-events: none;
@@ -77,33 +63,14 @@ const ToolTipWrapper = styled('div')`
     white-space: pre-line;
     word-break: break-word;
   }
-  [aria-label][data-balloon-pos][data-balloon-blunt]:before,
   [aria-label][data-balloon-pos][data-balloon-blunt]:after {
     transition: none;
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos='up']:hover:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='up'][data-balloon-visible]:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='down']:hover:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='down'][data-balloon-visible]:after {
-    transform: translate(-50%, 0);
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos='up']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='up'][data-balloon-visible]:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='down']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='down'][data-balloon-visible]:before {
-    transform: translate(-50%, 0);
   }
   [aria-label][data-balloon-pos][data-balloon-pos*='-left']:after {
     left: 0;
   }
-  [aria-label][data-balloon-pos][data-balloon-pos*='-left']:before {
-    left: 5px;
-  }
   [aria-label][data-balloon-pos][data-balloon-pos*='-right']:after {
     right: 0;
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos*='-right']:before {
-    right: 5px;
   }
   [aria-label][data-balloon-pos][data-balloon-pos*='-left']:hover:after,
   [aria-label][data-balloon-pos][data-balloon-pos*='-left'][data-balloon-visible]:after,
@@ -111,13 +78,6 @@ const ToolTipWrapper = styled('div')`
   [aria-label][data-balloon-pos][data-balloon-pos*='-right'][data-balloon-visible]:after {
     transform: translate(0, 0);
   }
-  [aria-label][data-balloon-pos][data-balloon-pos*='-left']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos*='-left'][data-balloon-visible]:before,
-  [aria-label][data-balloon-pos][data-balloon-pos*='-right']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos*='-right'][data-balloon-visible]:before {
-    transform: translate(0, 0);
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos^='up']:before,
   [aria-label][data-balloon-pos][data-balloon-pos^='up']:after {
     bottom: 100%;
     transform-origin: top;
@@ -126,12 +86,10 @@ const ToolTipWrapper = styled('div')`
   [aria-label][data-balloon-pos][data-balloon-pos^='up']:after {
     margin-bottom: 10px;
   }
-  [aria-label][data-balloon-pos][data-balloon-pos='up']:before,
   [aria-label][data-balloon-pos][data-balloon-pos='up']:after {
     left: 50%;
     transform: translate(-50%, var(--balloon-move));
   }
-  [aria-label][data-balloon-pos][data-balloon-pos^='down']:before,
   [aria-label][data-balloon-pos][data-balloon-pos^='down']:after {
     top: 100%;
     transform: translate(0, calc(var(--balloon-move) * -1));
@@ -139,31 +97,14 @@ const ToolTipWrapper = styled('div')`
   [aria-label][data-balloon-pos][data-balloon-pos^='down']:after {
     margin-top: 10px;
   }
-  [aria-label][data-balloon-pos][data-balloon-pos^='down']:before {
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-bottom-color: var(--balloon-color);
-  }
   [aria-label][data-balloon-pos][data-balloon-pos='down']:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='down']:before {
-    left: 50%;
-    transform: translate(-50%, calc(var(--balloon-move) * -1));
-  }
   [aria-label][data-balloon-pos][data-balloon-pos='left']:hover:after,
   [aria-label][data-balloon-pos][data-balloon-pos='left'][data-balloon-visible]:after,
   [aria-label][data-balloon-pos][data-balloon-pos='right']:hover:after,
   [aria-label][data-balloon-pos][data-balloon-pos='right'][data-balloon-visible]:after {
     transform: translate(0, -50%);
   }
-  [aria-label][data-balloon-pos][data-balloon-pos='left']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='left'][data-balloon-visible]:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='right']:hover:before,
-  [aria-label][data-balloon-pos][data-balloon-pos='right'][data-balloon-visible]:before {
-    transform: translate(0, -50%);
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos='left']:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='left']:before {
+  [aria-label][data-balloon-pos][data-balloon-pos='left']:after {
     right: 100%;
     top: 50%;
     transform: translate(var(--balloon-move), -50%);
@@ -171,26 +112,9 @@ const ToolTipWrapper = styled('div')`
   [aria-label][data-balloon-pos][data-balloon-pos='left']:after {
     margin-right: 10px;
   }
-  [aria-label][data-balloon-pos][data-balloon-pos='left']:before {
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-left-color: var(--balloon-color);
-  }
   [aria-label][data-balloon-pos][data-balloon-pos='right']:after,
-  [aria-label][data-balloon-pos][data-balloon-pos='right']:before {
-    left: 100%;
-    top: 50%;
-    transform: translate(calc(var(--balloon-move) * -1), -50%);
-  }
   [aria-label][data-balloon-pos][data-balloon-pos='right']:after {
     margin-left: 10px;
-  }
-  [aria-label][data-balloon-pos][data-balloon-pos='right']:before {
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-right-color: var(--balloon-color);
   }
   [aria-label][data-balloon-pos][data-balloon-length]:after {
     white-space: normal;
@@ -218,10 +142,10 @@ const ToolTipWrapper = styled('div')`
 `;
 ToolTipWrapper.defaultProps = { theme: defaultTheme };
 
-const ToolTip = ({ text, children }: Props) => {
+const ToolTip = ({ text, children, position = 'up' }: Props) => {
   return (
     <ToolTipWrapper>
-      <div aria-label={text} data-balloon-pos='right'>
+      <div aria-label={text} data-balloon-pos={position}>
         {children}
       </div>
     </ToolTipWrapper>
