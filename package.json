@@ -1,6 +1,6 @@
 {
   "name": "lina-essentials",
-  "version": "0.0.32",
+  "version": "0.0.40",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

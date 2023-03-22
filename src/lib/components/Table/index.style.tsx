@@ -75,7 +75,7 @@ export const TableHeaderColumn = styled('th')`
   min-height: 20px;
   max-height: 20px;
   width: auto;
-  z-index: 20;
+  /* z-index: 20; */
   white-space: nowrap;
   background-color: ${(props) => props.theme.colors.background};
   top: 0;
@@ -104,8 +104,8 @@ export const TableRow = styled('tr')`
 TableRow.defaultProps = { theme: defaultTheme };
 
 export const TableCell = styled('td')`
-  padding-top: 1rem /* 16px */;
-  padding-bottom: 1rem /* 16px */;
+  padding-top: 16px;
+  padding-bottom: 16px;
   padding-right: 8px;
   word-wrap: break-word; /* All browsers since IE 5.5+ */
   overflow-wrap: break-word;
@@ -219,3 +219,25 @@ export const SecondaryPaginationButton = styled(SecondaryButton)`
     color: ${(props) => props.theme.colors.gray};
   }
 `;
+
+export const TableInfo = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  height: ${(props: { itensPerPage?: number }) =>
+    `calc(19px * ${props.itensPerPage ? props.itensPerPage : 1})`};
+  /* 19px; */
+  padding-top: ${(props: { itensPerPage?: number }) =>
+    `calc(16px * ${props.itensPerPage ? props.itensPerPage : 1})`};
+  /* 16px; */
+  padding-bottom: ${(props: { itensPerPage?: number }) =>
+    `calc(16px * ${props.itensPerPage ? props.itensPerPage : 1})`};
+  /* 16px; */
+  padding-right: 8px;
+
+  background: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.gray};
+`;
+TableInfo.defaultProps = { theme: defaultTheme };

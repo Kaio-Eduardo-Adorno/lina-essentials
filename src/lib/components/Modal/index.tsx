@@ -12,13 +12,14 @@ export interface ModalProps {
   open: boolean;
   title: string | ReactNode;
   onClose: () => void | boolean;
+  width: string | number;
   children: ReactNode;
 }
 
-const Modal = ({ children, title, open = true, onClose = () => false }: ModalProps) => {
+const Modal = ({ children, title, width, open = true, onClose = () => false }: ModalProps) => {
   return (
     <ModalWrapper open={open}>
-      <ModalContainer>
+      <ModalContainer width={width}>
         <ModalHeader>
           <ModalHeaderTitle>{title}</ModalHeaderTitle>
           <ModalHeaderX

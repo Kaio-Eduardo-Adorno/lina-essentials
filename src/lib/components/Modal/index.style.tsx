@@ -26,12 +26,15 @@ export const ModalWrapper = styled('div')<Props>`
 `;
 ModalWrapper.defaultProps = { theme: defaultTheme };
 
-export const ModalContainer = styled('div')<Props>`
+export interface ModalContainerProps {
+  width?: string | number;
+}
+export const ModalContainer = styled('div')<ModalContainerProps>`
   background: #ffffff;
   box-shadow: 0px 10px 15px rgba(51, 51, 51, 0.2);
   border-radius: 16px;
   padding: 20px;
-  width: 230px;
+  width: ${(props) => (props.width ? props.width : '320px')};
 `;
 ModalContainer.defaultProps = { theme: defaultTheme };
 

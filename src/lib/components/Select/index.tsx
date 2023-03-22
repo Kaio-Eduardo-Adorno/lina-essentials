@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Icon from '../Icon';
+import { InputErrorMessage } from '../InputErrorMessage';
 import { Label } from '../InputText/index.style';
 import { ToolTipButton, ToolTipWrapper } from '../LabelTooltip';
 import ToolTip from '../Tooltip';
@@ -13,12 +14,13 @@ import {
   SelectWrapper,
 } from './index.style';
 
-export interface Props {
+export interface SelectProps {
   label?: { text: string; tooltip?: string };
   disabled: boolean;
   readOnly: boolean;
   options: { label: string; value: any }[];
   selectedValue: any;
+  error?: string;
   onChange: (v: any) => void;
   [x: string]: any;
 }
@@ -33,8 +35,9 @@ const Select = ({
   label,
   disabled = false,
   readOnly = false,
+  error,
   ...rest
-}: Props) => {
+}: SelectProps) => {
   const [open, setOpen] = useState(false);
   const [currentOption, setCurrentOption] = useState<{ label: string; value: any }>({
     label: 'Selecione',
@@ -109,6 +112,7 @@ const Select = ({
           ))}
         </SelectOptionsContainer>
       </SelectContainer>
+      {error && <InputErrorMessage>{error}</InputErrorMessage>}
     </SelectWrapper>
   );
 };

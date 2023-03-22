@@ -1,25 +1,23 @@
-import Icon, { Props as IconProps } from '../Icon';
 import ToolTip from '../Tooltip';
 import { Label, TextArea, TextAreaWrapper } from './index.style';
 import { ToolTipButton, ToolTipWrapper } from '../LabelTooltip';
+import { InputErrorMessage } from '../InputErrorMessage';
 
-export interface Props {
-  leftIcon: IconProps;
-  rightIcon: IconProps;
+export interface TextAreaProps {
   label?: { text: string; tooltip?: string };
-  disabled: boolean;
-  readOnly: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  error?: string;
   [x: string]: any;
 }
 
-const InputText = ({
-  rightIcon,
-  leftIcon,
+const TextAreaInput = ({
   label,
+  error,
   disabled = false,
   readOnly = false,
   ...rest
-}: Props) => {
+}: TextAreaProps) => {
   return (
     <TextAreaWrapper>
       {label?.text && (
@@ -35,8 +33,9 @@ const InputText = ({
         </Label>
       )}
       <TextArea disabled={disabled} readOnly={readOnly} {...rest} />
+      {error && <InputErrorMessage>{error}</InputErrorMessage>}
     </TextAreaWrapper>
   );
 };
 
-export default InputText;
+export default TextAreaInput;

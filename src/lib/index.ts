@@ -1,7 +1,11 @@
 import { iconsList } from './components/Icon';
+import { InputProps } from './components/InputText';
+import { SelectProps } from './components/Select';
+import { TextAreaProps } from './components/TextArea';
 
 //Types
 export type IconType = typeof iconsList[number];
+export type { InputProps, SelectProps, TextAreaProps };
 
 //Components
 export { PrimaryButton, SecondaryButton } from './components/Button';

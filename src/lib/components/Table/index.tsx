@@ -18,6 +18,7 @@ import {
   ItensPerPageSelect,
   PrimaryPaginationButton,
   SecondaryPaginationButton,
+  TableInfo,
 } from './index.style';
 
 export interface TableProps {
@@ -38,7 +39,7 @@ export interface TableProps {
 
 const Table = ({
   headers,
-  data,
+  data = [],
   onPageChange,
   onItensPerPageChange,
   initialItensPerPage,
@@ -72,64 +73,86 @@ const Table = ({
               )}
             </tr>
           </thead>
-          <tbody>
-            {data.map((item, i) => {
-              const flattedItem: { [key: string]: unknown } = flatten(item);
-              return (
-                <TableRow key={i}>
-                  {headers.map((header, i) => (
-                    <TableCell key={i}>
-                      {header?.format
-                        ? header.format(flattedItem[header.key])
-                        : flattedItem[header.key]}
-                    </TableCell>
-                  ))}
+          {data && data.length > 0 && (
+            <tbody>
+              {data.map((item, i) => {
+                const flattedItem: { [key: string]: unknown } = flatten(item);
+                return (
+                  <TableRow key={i}>
+                    {headers.map((header, i) => (
+                      <TableCell key={i}>
+                        {header?.format
+                          ? header.format(flattedItem[header.key])
+                          : flattedItem[header.key]}
+                      </TableCell>
+                    ))}
 
-                  {typeof actions?.length === 'number' && actions?.length > 0 && (
-                    <ActionButtons>
-                      <ActionButtonsContainer>
-                        {actions?.map((action, i) => {
-                          if (action?.showCondition && action?.showCondition(item))
-                            return (
-                              <ToolTip text={action.tooltip} position='left' key={i}>
-                                <Icon icon={action.icon} size={20} onClick={action.action} />
-                              </ToolTip>
-                            );
-                        })}
-                      </ActionButtonsContainer>
-                    </ActionButtons>
-                  )}
-                </TableRow>
-              );
-            })}
-          </tbody>
+                    {typeof actions?.length === 'number' && actions?.length > 0 && (
+                      <ActionButtons>
+                        <ActionButtonsContainer>
+                          {actions?.map((action, i) => {
+                            if (action?.showCondition && action?.showCondition(item))
+                              return (
+                                <ToolTip text={action.tooltip} position='left' key={i}>
+                                  <Icon icon={action.icon} size={20} onClick={action.action} />
+                                </ToolTip>
+                              );
+                          })}
+                        </ActionButtonsContainer>
+                      </ActionButtons>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </tbody>
+          )}
         </CustomTable>
       </TableContentWrapper>
+      {data && data.length === 0 && pageState === 1 && (
+        <TableInfo itensPerPage={itensPerPage}>
+          <Icon icon='info' size={16} />
+          <p>Nenhum registro encontrado</p>
+        </TableInfo>
+      )}
+      {data && data.length === 0 && pageState > 1 && (
+        <TableInfo itensPerPage={itensPerPage}>
+          <Icon icon='info' size={16} />
+          <p>Página sem conteúdo</p>
+        </TableInfo>
+      )}
       <TableOptions>
         <TotalItems>
-          <>
-            {itensPerPage * pageState - itensPerPage + 1} -{' '}
-            {itensPerPage * pageState - itensPerPage + data.length} {totalData && `de ${totalData}`}{' '}
-            itens
-          </>
+          {data && data.length > 0 && (
+            <>
+              {itensPerPage * pageState - itensPerPage + 1} -{' '}
+              {itensPerPage * pageState - itensPerPage + data.length}{' '}
+              {totalData && `de ${totalData}`} itens
+            </>
+          )}
         </TotalItems>
 
         <PaginationButtons>
-          {pageState > 1 && (
-            <SecondaryPaginationButton onClick={() => setPage(pageState - 1)}>
-              {pageState - 1}
-            </SecondaryPaginationButton>
-          )}
-          <PrimaryPaginationButton onClick={() => setPage(pageState)}>
-            {pageState}
-          </PrimaryPaginationButton>
-          {((totalData && itensPerPage * pageState - itensPerPage + data.length !== totalData) ||
-            data.length === itensPerPage) && (
-            <SecondaryPaginationButton onClick={() => setPage(pageState + 1)}>
-              {pageState + 1}
-            </SecondaryPaginationButton>
+          {((data && data.length > 0) || pageState > 1) && (
+            <>
+              {pageState > 1 && (
+                <SecondaryPaginationButton onClick={() => setPage(pageState - 1)}>
+                  {pageState - 1}
+                </SecondaryPaginationButton>
+              )}
+              <PrimaryPaginationButton onClick={() => setPage(pageState)}>
+                {pageState}
+              </PrimaryPaginationButton>
+              {((totalData &&
+                itensPerPage * pageState - itensPerPage + data.length !== totalData) ||
+                data.length === itensPerPage) && (
+                <SecondaryPaginationButton onClick={() => setPage(pageState + 1)}>
+                  {pageState + 1}
+                </SecondaryPaginationButton>
+              )}
+            </>
           )}
         </PaginationButtons>
+
         <ItensPerPageWrapper>
           Exibir
           <ItensPerPageSelect

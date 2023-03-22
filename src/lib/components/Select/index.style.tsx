@@ -14,6 +14,7 @@ export const SelectWrapper = styled('div')`
   min-width: 100%;
   max-width: 100%;
   width: 100%;
+  position: relative;
 `;
 SelectWrapper.defaultProps = { theme: defaultTheme };
 
@@ -57,6 +58,7 @@ SelectOptionsContainer.defaultProps = { theme: defaultTheme };
 
 export const SelectContainer = styled('div')`
   position: relative;
+  z-index: 999;
 `;
 SelectContainer.defaultProps = { theme: defaultTheme };
 
