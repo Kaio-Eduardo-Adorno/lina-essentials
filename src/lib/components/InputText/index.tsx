@@ -20,7 +20,7 @@ const InputText = ({
   label,
   disabled = false,
   readOnly = false,
-  error = 'Campo obrigatório',
+  error,
   ...rest
 }: InputProps) => {
   return (

@@ -5,12 +5,15 @@ import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
+  server: {
+    port: 3002,
+  },
   plugins: [
     react(),
     svgr({
-      svgrOptions: {
-        replaceAttrValues: { black: '{props.color}' },
-      },
+      // svgrOptions: {
+      // replaceAttrValues: { black: '{props.color}' },
+      // },
     }),
     dts({
       insertTypesEntry: true,

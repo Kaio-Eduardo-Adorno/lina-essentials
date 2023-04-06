@@ -81,6 +81,7 @@ export const TableHeaderColumn = styled('th')`
   top: 0;
   position: -webkit-sticky;
   position: sticky;
+  color: ${(props) => props.theme.colors.darkGray};
   &:first-child {
     padding-left: 20px;
   }
@@ -109,6 +110,7 @@ export const TableCell = styled('td')`
   padding-right: 8px;
   word-wrap: break-word; /* All browsers since IE 5.5+ */
   overflow-wrap: break-word;
+  color: ${(props) => props.theme.colors.darkGray};
   &:first-child {
     color: ${(props) => props.theme.colors.black};
     padding-left: 20px;
@@ -154,8 +156,9 @@ export const ActionButtonsContainer = styled('div')`
   color: ${(props) => props.theme.colors.primary};
   svg {
     cursor: pointer;
+    fill: ${(props) => props.theme.colors.primary};
     &:hover {
-      color: ${(props) => props.theme.colors.secondary};
+      fill: ${(props) => props.theme.colors.secondary};
     }
   }
 `;

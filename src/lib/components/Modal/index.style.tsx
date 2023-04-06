@@ -17,24 +17,60 @@ export const ModalWrapper = styled('div')<Props>`
   right: 0;
   bottom: 0;
   display: flex;
-  align-items: center;
+  padding: 30px 0px;
+  align-items: flex-start;
   justify-content: center;
+  overflow: auto;
   opacity: ${(props) => (props.open ? '1' : '0')};
   pointer-events: ${(props) => (props.open ? 'all' : 'none')};
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity linear 0.25s;
+  @media screen and (max-width: 576px) {
+    padding: 0;
+  }
 `;
 ModalWrapper.defaultProps = { theme: defaultTheme };
 
-export interface ModalContainerProps {
-  width?: string | number;
+export interface ModalWidthProps {
+  xs: string | number;
+  sm: string | number;
+  md: string | number;
+  lg: string | number;
+  xl: string | number;
 }
+export interface ModalContainerProps {
+  width?: string | number | ModalWidthProps;
+}
+
+const defineModalWidth = (
+  defaultValue: string | number,
+  type: 'xs' | 'sm' | 'md' | 'lg' | 'xl',
+  width?: string | number | ModalWidthProps,
+) => {
+  if (!width) return defaultValue;
+  else if (typeof width === 'string' || typeof width === 'number') return width;
+  return width[type];
+};
+
 export const ModalContainer = styled('div')<ModalContainerProps>`
   background: #ffffff;
   box-shadow: 0px 10px 15px rgba(51, 51, 51, 0.2);
   border-radius: 16px;
   padding: 20px;
-  width: ${(props) => (props.width ? props.width : '320px')};
+  width: ${(props) => defineModalWidth('60%', 'xl', props.width)};
+  @media screen and (max-width: 1200px) {
+    width: ${(props) => defineModalWidth('70%', 'lg', props.width)};
+  }
+  @media screen and (max-width: 992px) {
+    width: ${(props) => defineModalWidth('70%', 'md', props.width)};
+  }
+  @media screen and (max-width: 768px) {
+    width: ${(props) => defineModalWidth('80%', 'sm', props.width)};
+  }
+  @media screen and (max-width: 576px) {
+    width: ${(props) => defineModalWidth('100%', 'xs', props.width)};
+    border-radius: 0;
+  }
 `;
 ModalContainer.defaultProps = { theme: defaultTheme };
 
@@ -58,10 +94,12 @@ ModalHeaderTitle.defaultProps = { theme: defaultTheme };
 export const ModalHeaderX = styled('div')`
   display: flex;
   align-items: center;
-  color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
-  &:hover {
-    color: ${(props) => props.theme.colors.secondary};
+  svg {
+    fill: ${(props) => props.theme.colors.primary};
+    &:hover {
+      fill: ${(props) => props.theme.colors.secondary};
+    }
   }
 `;
 ModalHeaderX.defaultProps = { theme: defaultTheme };

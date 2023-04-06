@@ -21,8 +21,26 @@ import {
   TableInfo,
 } from './index.style';
 
+export interface TableCellValueProps {
+  value: unknown;
+  rowData: unknown;
+  format?: (toFormat: unknown, rowData: unknown) => string;
+  Component?: ({ value, rowData, format }: Omit<TableCellValueProps, 'Component'>) => JSX.Element;
+}
+
+const TableCellValue = ({ value, rowData, format, Component }: TableCellValueProps) => {
+  if (Component) return <Component value={value} rowData={rowData} />;
+  else if (format) return <>{format(value, rowData)}</>;
+  return <>{value}</>;
+};
+
+export interface TableHeaderProps extends Pick<TableCellValueProps, 'format' | 'Component'> {
+  key: string;
+  label: string;
+}
+
 export interface TableProps {
-  headers: { key: string; label: string; format?: (toFormat: unknown) => string }[];
+  headers: TableHeaderProps[];
   data: { [key: string]: unknown }[];
   totalData?: number;
   initialPage?: number;
@@ -81,9 +99,12 @@ const Table = ({
                   <TableRow key={i}>
                     {headers.map((header, i) => (
                       <TableCell key={i}>
-                        {header?.format
-                          ? header.format(flattedItem[header.key])
-                          : flattedItem[header.key]}
+                        <TableCellValue
+                          value={flattedItem[header.key]}
+                          rowData={item}
+                          format={header?.format}
+                          Component={header?.Component}
+                        />
                       </TableCell>
                     ))}
 
@@ -94,7 +115,11 @@ const Table = ({
                             if (action?.showCondition && action?.showCondition(item))
                               return (
                                 <ToolTip text={action.tooltip} position='left' key={i}>
-                                  <Icon icon={action.icon} size={20} onClick={action.action} />
+                                  <Icon
+                                    icon={action.icon}
+                                    size={20}
+                                    onClick={() => action.action(item)}
+                                  />
                                 </ToolTip>
                               );
                           })}

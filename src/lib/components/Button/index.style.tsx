@@ -22,18 +22,27 @@ export const PrimaryStyledButton = styled('button')`
   width: auto;
 
   font-size: ${(props) => props.theme.fontSizes.medium};
-  color: ${(props) => props.theme.colors.white};
   background: ${(props) => props.theme.colors.primary};
   border: 1px solid transparent;
+  color: ${(props) => props.theme.colors.white};
+  svg {
+    fill: ${(props) => props.theme.colors.white};
+  }
 
   &:hover {
-    color: ${(props) => props.theme.colors.white};
     background: ${(props) => props.theme.colors.secondary};
+    color: ${(props) => props.theme.colors.white};
+    svg {
+      fill: ${(props) => props.theme.colors.white};
+    }
   }
   &:focus {
     outline: none;
-    color: ${(props) => props.theme.colors.primary};
     background: ${(props) => props.theme.colors.quaternary};
+    color: ${(props) => props.theme.colors.primary};
+    svg {
+      fill: ${(props) => props.theme.colors.primary};
+    }
   }
 
   &:disabled {
@@ -44,18 +53,27 @@ export const PrimaryStyledButton = styled('button')`
 PrimaryStyledButton.defaultProps = { theme: defaultTheme };
 
 export const SecondaryStyledButton = styled(PrimaryStyledButton)`
-  color: ${(props) => props.theme.colors.primary};
   background: ${(props) => props.theme.colors.quaternary};
   border: 1px solid ${(props) => props.theme.colors.tertiary};
+  color: ${(props) => props.theme.colors.primary};
+  svg {
+    fill: ${(props) => props.theme.colors.primary};
+  }
 
   &:hover {
-    color: ${(props) => props.theme.colors.white};
     background: ${(props) => props.theme.colors.primary};
     border: 1px solid transparent;
+    color: ${(props) => props.theme.colors.white};
+    svg {
+      fill: ${(props) => props.theme.colors.white};
+    }
   }
   &:focus {
-    color: ${(props) => props.theme.colors.primary};
     background: ${(props) => props.theme.colors.tertiary};
     border: 1px solid transparent;
+    color: ${(props) => props.theme.colors.primary};
+    svg {
+      fill: ${(props) => props.theme.colors.primary};
+    }
   }
 `;

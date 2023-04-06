@@ -53,6 +53,24 @@ export const SelectOptionsContainer = styled('div')<Props>`
   pointer-events: ${(props) => (props.open ? 'all' : 'none')};
 
   transition: opacity linear 0.25s;
+  max-height: 214px;
+  overflow-y: auto;
+
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: ${(props) => props.theme.colors.primary};
+    box-shadow: inset 0 0 2px ${(props) => `${props.theme.colors.darkGray}40`};
+    :hover {
+      background: ${(props) => props.theme.colors.secondary};
+    }
+  }
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 `;
 SelectOptionsContainer.defaultProps = { theme: defaultTheme };
 
@@ -62,10 +80,17 @@ export const SelectContainer = styled('div')`
 `;
 SelectContainer.defaultProps = { theme: defaultTheme };
 
-export const SelectOption = styled('div')`
+export interface SelectOptionProps {
+  selected?: boolean;
+}
+
+export const SelectOption = styled('div')<SelectOptionProps>`
   cursor: pointer;
   padding: 8px 14px;
-  color: ${(props) => props.theme.colors.darkGray};
+  color: ${(props) => (props.selected ? props.theme.colors.white : props.theme.colors.darkGray)};
+  background-color: ${(props) =>
+    props.selected ? props.theme.colors.secondary : props.theme.colors.white};
+
   &:first-child {
     border-radius: 4px 4px 0px 0px;
   }
@@ -79,14 +104,18 @@ export const SelectOption = styled('div')`
 `;
 SelectOption.defaultProps = { theme: defaultTheme };
 
-export const SelectInput = styled('input')`
+export interface SelectInputProps {
+  search?: boolean;
+}
+
+export const SelectInput = styled('input')<SelectInputProps>`
   border: none;
   background: none;
   outline: none;
   width: 100%;
   font-size: ${(props) => props.theme.fontSizes.default};
   color: ${(props) => props.theme.colors.darkGray};
-  pointer-events: none;
+  pointer-events: ${(props) => (props.search ? 'all' : 'none')};
   ::placeholder {
     color: ${(props) => props.theme.colors.gray};
   }
