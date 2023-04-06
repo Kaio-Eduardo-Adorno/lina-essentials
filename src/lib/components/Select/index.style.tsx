@@ -87,9 +87,9 @@ export interface SelectOptionProps {
 export const SelectOption = styled('div')<SelectOptionProps>`
   cursor: pointer;
   padding: 8px 14px;
-  color: ${(props) => (props.selected ? props.theme.colors.white : props.theme.colors.darkGray)};
+  color: ${(props) => props.theme.colors.darkGray};
   background-color: ${(props) =>
-    props.selected ? props.theme.colors.secondary : props.theme.colors.white};
+    props.selected ? props.theme.colors.quaternary : props.theme.colors.white};
 
   &:first-child {
     border-radius: 4px 4px 0px 0px;
