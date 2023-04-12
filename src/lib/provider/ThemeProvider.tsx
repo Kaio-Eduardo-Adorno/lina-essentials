@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import { defaultTheme } from '../themes';
 
@@ -19,7 +19,6 @@ export const CustomThemeProvider = ({
   themes: DefaultTheme[];
 }) => {
   const [theme, setTheme] = useState<DefaultTheme>(defaultTheme);
-  console.log('tema dentro: ' + theme);
 
   const toggleTheme = useCallback(
     (name) => {

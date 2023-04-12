@@ -28,7 +28,7 @@ const getBaseControlInfo = (name: string) => {
 };
 
 const meta: ComponentMeta<typeof MyComponent> = {
-  title: 'Lina Essentials/Input',
+  title: 'Lina Essentials/TextArea',
   component: MyComponent,
   decorators: [(Story) => <Story />],
 };

@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStoryObj } from '@storybook/react';
 import { useState } from 'react';
 import Modal from '.';
-import Button from '../Button';
+import { PrimaryButton } from '../Button';
 
 const meta: ComponentMeta<typeof Modal> = {
   title: 'Lina Essentials/Modal',
@@ -11,12 +11,10 @@ const meta: ComponentMeta<typeof Modal> = {
       const [open, setOpen] = useState(false);
       return (
         <>
-          <Button styleType='primary' onClick={() => setOpen(true)}>
-            Abrir Modal
-          </Button>
+          <PrimaryButton onClick={() => setOpen(true)}>Abrir Modal</PrimaryButton>
           <Story
             args={{
-              title: 'Título exemplo',
+              title: 'Title',
               open: open,
               onClose: () => setOpen(false),
               children: 'exemplo',
@@ -30,7 +28,7 @@ const meta: ComponentMeta<typeof Modal> = {
 export default meta;
 
 export const ModalStory: ComponentStoryObj<typeof Modal> = {
-  name: 'Content',
+  name: 'Modal',
   args: {
     children: 'Hello',
   },

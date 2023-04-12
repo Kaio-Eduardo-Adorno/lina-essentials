@@ -1,7 +1,7 @@
 import { flatten } from 'flat';
 import { useEffect, useState } from 'react';
-import Button from '../Button';
-import Icon from '../Icon';
+import Icon, { IconType } from '../Icon';
+import ToolTip from '../Tooltip';
 import {
   TableHeaderColumn,
   TableRow,
@@ -16,34 +16,64 @@ import {
   PaginationButtons,
   ItensPerPageWrapper,
   ItensPerPageSelect,
+  PrimaryPaginationButton,
+  SecondaryPaginationButton,
+  TableInfo,
 } from './index.style';
 
+export interface TableCellValueProps {
+  value: unknown;
+  rowData: unknown;
+  format?: (toFormat: unknown, rowData: unknown) => string;
+  Component?: ({ value, rowData, format }: Omit<TableCellValueProps, 'Component'>) => JSX.Element;
+}
+
+const TableCellValue = ({ value, rowData, format, Component }: TableCellValueProps) => {
+  if (Component) return <Component value={value} rowData={rowData} />;
+  else if (format) return <>{format(value, rowData)}</>;
+  return <>{value}</>;
+};
+
+export interface TableHeaderProps extends Pick<TableCellValueProps, 'format' | 'Component'> {
+  key: string;
+  label: string;
+}
+
 export interface TableProps {
-  headers: { key: string; label: string; format?: (toFormat: unknown) => string }[];
+  headers: TableHeaderProps[];
   data: { [key: string]: unknown }[];
-  totalData: number;
-  itensPerPage: number;
+  totalData?: number;
+  initialPage?: number;
   onPageChange?: (page: number) => void;
-  onEdit?: (rowData: unknown) => void;
-  onView?: (rowData: unknown) => void;
-  onDelete?: (rowData: unknown) => void;
+  onItensPerPageChange?: (itensPerPage: number) => void;
+  initialItensPerPage?: 5 | 10 | 25 | 50 | 100;
+  actions?: {
+    icon: IconType;
+    tooltip: string;
+    action: (rowData: unknown) => void;
+    showCondition?: (rowData: unknown) => boolean;
+  }[];
 }
 
 const Table = ({
   headers,
-  data,
-  onEdit,
-  onView,
-  onDelete,
+  data = [],
   onPageChange,
-  totalData = 3,
+  onItensPerPageChange,
+  initialItensPerPage,
+  totalData,
+  actions,
 }: TableProps) => {
   const [pageState, setPage] = useState(1);
-  const [itensPerPage, setItensPerPage] = useState(5);
+  const [itensPerPage, setItensPerPage] = useState<number>(initialItensPerPage || 5);
 
   useEffect(() => {
     if (onPageChange) onPageChange(pageState);
   }, [onPageChange, pageState]);
+
+  useEffect(() => {
+    if (onItensPerPageChange) onItensPerPageChange(itensPerPage);
+  }, [onItensPerPageChange, itensPerPage]);
 
   return (
     <TableWrapper>
@@ -56,79 +86,98 @@ const Table = ({
                   {header.label}
                 </TableHeaderColumn>
               ))}
-              {(onEdit || onView || onDelete) && <TableHeaderColumn scope='col' />}
+              {typeof actions?.length === 'number' && actions?.length > 0 && (
+                <TableHeaderColumn scope='col' />
+              )}
             </tr>
           </thead>
-          <tbody>
-            {data.map((item, i) => {
-              const flattedItem: { [key: string]: unknown } = flatten(item);
-              return (
-                <TableRow key={i}>
-                  {headers.map((header, i) => (
-                    <TableCell key={i}>
-                      {header?.format
-                        ? header.format(flattedItem[header.key])
-                        : flattedItem[header.key]}
-                    </TableCell>
-                  ))}
+          {data && data.length > 0 && (
+            <tbody>
+              {data.map((item, i) => {
+                const flattedItem: { [key: string]: unknown } = flatten(item);
+                return (
+                  <TableRow key={i}>
+                    {headers.map((header, i) => (
+                      <TableCell key={i}>
+                        <TableCellValue
+                          value={flattedItem[header.key]}
+                          rowData={item}
+                          format={header?.format}
+                          Component={header?.Component}
+                        />
+                      </TableCell>
+                    ))}
 
-                  {(onEdit || onView || onDelete) && (
-                    <ActionButtons>
-                      <ActionButtonsContainer>
-                        {onView && <Icon icon='eye' size={20} onClick={onView} />}
-                        {onEdit && <Icon icon='pencil' size={20} onClick={onEdit} />}
-                        {onDelete && <Icon icon='trash' size={20} onClick={onDelete} />}
-                      </ActionButtonsContainer>
-                    </ActionButtons>
-                  )}
-                </TableRow>
-              );
-            })}
-          </tbody>
+                    {typeof actions?.length === 'number' && actions?.length > 0 && (
+                      <ActionButtons>
+                        <ActionButtonsContainer>
+                          {actions?.map((action, i) => {
+                            if (action?.showCondition && action?.showCondition(item))
+                              return (
+                                <ToolTip text={action.tooltip} position='left' key={i}>
+                                  <Icon
+                                    icon={action.icon}
+                                    size={20}
+                                    onClick={() => action.action(item)}
+                                  />
+                                </ToolTip>
+                              );
+                          })}
+                        </ActionButtonsContainer>
+                      </ActionButtons>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </tbody>
+          )}
         </CustomTable>
       </TableContentWrapper>
+      {data && data.length === 0 && pageState === 1 && (
+        <TableInfo itensPerPage={itensPerPage}>
+          <Icon icon='info' size={16} />
+          <p>Nenhum registro encontrado</p>
+        </TableInfo>
+      )}
+      {data && data.length === 0 && pageState > 1 && (
+        <TableInfo itensPerPage={itensPerPage}>
+          <Icon icon='info' size={16} />
+          <p>Página sem conteúdo</p>
+        </TableInfo>
+      )}
       <TableOptions>
         <TotalItems>
-          {itensPerPage * pageState - itensPerPage + 1} -{' '}
-          {itensPerPage * pageState - itensPerPage + data.length} de {totalData} lançamentos
-        </TotalItems>
-        <PaginationButtons>
-          {pageState > 1 && (
-            <Button
-              styleType='secondary'
-              style={{
-                justifyContent: 'center',
-                padding: '4px 8px',
-                height: '24px',
-                width: '24px',
-              }}
-              onClick={() => setPage(pageState - 1)}
-            >
-              {pageState - 1}
-            </Button>
+          {data && data.length > 0 && (
+            <>
+              {itensPerPage * pageState - itensPerPage + 1} -{' '}
+              {itensPerPage * pageState - itensPerPage + data.length}{' '}
+              {totalData && `de ${totalData}`} itens
+            </>
           )}
-          <Button
-            styleType='primary'
-            style={{ justifyContent: 'center', padding: '4px 8px', height: '24px', width: '24px' }}
-            onClick={() => setPage(pageState)}
-          >
-            {pageState}
-          </Button>
-          {itensPerPage * pageState - itensPerPage + data.length !== totalData && (
-            <Button
-              styleType='secondary'
-              style={{
-                justifyContent: 'center',
-                padding: '4px 8px',
-                height: '24px',
-                width: '24px',
-              }}
-              onClick={() => setPage(pageState + 1)}
-            >
-              {pageState + 1}
-            </Button>
+        </TotalItems>
+
+        <PaginationButtons>
+          {((data && data.length > 0) || pageState > 1) && (
+            <>
+              {pageState > 1 && (
+                <SecondaryPaginationButton onClick={() => setPage(pageState - 1)}>
+                  {pageState - 1}
+                </SecondaryPaginationButton>
+              )}
+              <PrimaryPaginationButton onClick={() => setPage(pageState)}>
+                {pageState}
+              </PrimaryPaginationButton>
+              {((totalData &&
+                itensPerPage * pageState - itensPerPage + data.length !== totalData) ||
+                data.length === itensPerPage) && (
+                <SecondaryPaginationButton onClick={() => setPage(pageState + 1)}>
+                  {pageState + 1}
+                </SecondaryPaginationButton>
+              )}
+            </>
           )}
         </PaginationButtons>
+
         <ItensPerPageWrapper>
           Exibir
           <ItensPerPageSelect

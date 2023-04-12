@@ -1,25 +1,65 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Button } from './lib';
-import Select from './lib/components/Select';
-import CustomThemeProvider, { useTheme } from './lib/provider/ThemeProvider';
+import { Modal, PrimaryButton } from './lib';
+
+import { useTheme } from './lib/provider/ThemeProvider';
 import { themes } from './lib/themes';
 
 function App() {
   const { toggleTheme } = useTheme();
+  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Wrapper>
-        <Button styleType={'primary'} onClick={() => toggleTheme('spi')}>
-          Primary
-        </Button>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <PrimaryButton onClick={() => setOpen(true)}>Abrir Modal</PrimaryButton>
+      <Modal title='Title' open={open} onClose={() => setOpen(false)} width='200px'>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
+      </Modal>
+    </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   padding: 2rem;
-  background-color: #f0f0f1;
 `;
 
 export default App;

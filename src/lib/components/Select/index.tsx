@@ -1,135 +1,165 @@
-import { useState } from 'react';
-import styled from '../../utils/wrapper-styled-components';
+import { useEffect, useState } from 'react';
 import Icon from '../Icon';
+import { InputErrorMessage } from '../InputErrorMessage';
+import { Label } from '../InputText/index.style';
+import { ToolTipButton, ToolTipWrapper } from '../LabelTooltip';
+import ToolTip from '../Tooltip';
+import {
+  SelectContainer,
+  SelectInput,
+  SelectInputContainer,
+  SelectInputValue,
+  SelectOption,
+  SelectOptionsContainer,
+  SelectWrapper,
+} from './index.style';
 
-export interface Props {
-  open?: boolean;
+export interface SelectProps {
+  label?: { text: string; tooltip?: string };
+  disabled: boolean;
+  readOnly: boolean;
+  searchable: boolean;
+  multi: boolean;
+  options: { label: string; value: any }[];
+  selectedValue: any;
+  error?: string;
+  onChange: (v: any) => void;
+  [x: string]: any;
 }
 
-const Label = styled('label')`
-  border: none;
-  background: none;
-  outline: none;
-  width: 100%;
-  font-size: 14px;
-  line-height: 16px;
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-  font-family: 'Roboto';
-  color: #666666;
-`;
-const Input = styled('input')`
-  border: none;
-  background: none;
-  outline: none;
-  width: 100%;
-  font-size: 16px;
-  line-height: 19px;
-  color: #666666;
-  pointer-events: none;
-  ::placeholder {
-    color: #9b9b9b;
-  }
-`;
-
-const SelectWrapper = styled('div')`
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-  font-family: 'Roboto';
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 100%;
-  max-width: 100%;
-  width: 100%;
-`;
-
-const InputContainer = styled('div')`
-  display: flex;
-  background: #fdfdfd;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 8px 10px;
-  gap: 4px;
-  box-shadow: 0px 0px 2px rgba(134, 103, 236, 0.8);
-  &:focus-within {
-    box-shadow: 0px 0px 2px rgba(0, 103, 236, 0.8);
-  }
-`;
-const OptionsContainer = styled('div')<Props>`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  left: 0;
-  right: 0;
-  top: 42px;
-  background: #fdfdfd;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  opacity: ${(props) => (props.open ? '1' : '0')};
-  pointer-events: ${(props) => (props.open ? 'all' : 'none')};
-
-  transition: opacity linear 0.25s;
-`;
-const SelectContainer = styled('div')`
-  position: relative;
-`;
-const Option = styled('div')`
-  cursor: pointer;
-  padding: 8px 14px;
-  &:first-child {
-    border-radius: 4px 4px 0px 0px;
-  }
-  &:last-child {
-    border-radius: 0px 0px 4px 4px;
-  }
-  &:hover {
-    background-color: aliceblue;
-  }
-`;
+type CurrentOptionType = { label: string; value: any }[] | { label: string; value: any };
 
 const Select = ({
-  options = [
-    { label: 'Teste', value: '2a' },
-    { label: 'Teste2', value: '2a' },
-  ],
-}: {
-  options: { label: string; value: any }[];
-}) => {
+  options,
+  onChange,
+  searchable,
+  multi,
+  selectedValue = null,
+  label,
+  disabled = false,
+  readOnly = false,
+  error,
+  ...rest
+}: SelectProps) => {
   const [open, setOpen] = useState(false);
-  const [currentOption, setCurrentOption] = useState<{ label: string; value: any }>({
-    label: 'Selecione',
-    value: 'a',
-  });
+  const [filter, setFilter] = useState('');
+  const [currentOption, setCurrentOption] = useState<CurrentOptionType>(
+    multi ? [] : { label: '', value: null },
+  );
+
+  const selectedLabels = Array.isArray(currentOption)
+    ? currentOption.map((option) => option.label).join(', ')
+    : currentOption.label;
+
+  useEffect(() => {
+    if (!multi && !Array.isArray(currentOption)) onChange(currentOption.value);
+    else if (multi && Array.isArray(currentOption))
+      onChange(currentOption.map((option) => option.value));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOption]);
+
+  useEffect(() => {
+    const optionToSelect = options.findIndex((opt) => opt.value === selectedValue);
+    if (optionToSelect !== -1) setCurrentOption(options[optionToSelect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedValue]);
 
   return (
     <SelectWrapper>
-      <Label>Label</Label>
+      {label?.text && (
+        <Label>
+          {label?.text}
+          {label?.tooltip && (
+            <ToolTipWrapper>
+              <ToolTip text={label.tooltip}>
+                <ToolTipButton>?</ToolTipButton>
+              </ToolTip>
+            </ToolTipWrapper>
+          )}
+        </Label>
+      )}
+
       <SelectContainer>
-        <InputContainer onClick={() => setOpen(!open)}>
-          <Input placeholder='Selecione' value={currentOption.label || undefined} />
-          <Icon icon='chevron_down' size={22} fill='#8667EC' />
-        </InputContainer>
-        <OptionsContainer open={open}>
-          <Option
+        <SelectInputContainer
+          onClick={() => setOpen(!open)}
+          disabled={disabled}
+          readOnly={readOnly}
+        >
+          <SelectInput
+            onChange={(e) => {
+              setFilter(e.target.value);
+              setOpen(true);
+            }}
+            placeholder='Selecione'
+            search={searchable}
+            disabled={disabled}
+            readOnly={readOnly}
+            value={open ? filter : selectedLabels}
+          />
+          <SelectInputValue
+            onChange={() => null}
+            disabled={disabled}
+            readOnly={readOnly}
+            {...rest}
+          />
+          <Icon icon='chevron_down' size={22} />
+        </SelectInputContainer>
+        <SelectOptionsContainer open={open}>
+          <SelectOption
             onClick={() => {
-              setCurrentOption({ label: 'Selecione', value: null });
               setOpen(false);
+              if (multi) {
+                setCurrentOption([]);
+                return;
+              }
+              setCurrentOption({ label: '', value: null });
             }}
           >
             Selecione
-          </Option>
-          {options.map((option, i) => (
-            <Option
-              key={i}
-              onClick={() => {
-                setCurrentOption(option);
-                setOpen(false);
-              }}
-            >
-              {option.label}
-            </Option>
-          ))}
-        </OptionsContainer>
+          </SelectOption>
+          {options.map((option, i) => {
+            const onSelectOption = () => {
+              setFilter('');
+              setOpen(false);
+              if (multi) {
+                if (Array.isArray(currentOption)) {
+                  if (currentOption.findIndex((cOption) => option.value === cOption.value) !== -1) {
+                    setCurrentOption(
+                      currentOption.filter((cOption) => option.value !== cOption.value),
+                    );
+                    return;
+                  }
+                  setCurrentOption([...currentOption, option]);
+                }
+                return;
+              }
+              setCurrentOption(option);
+            };
+
+            const selected = Array.isArray(currentOption)
+              ? currentOption.findIndex((cOption) => cOption.value === option.value) !== -1
+              : currentOption.value === option.value;
+
+            if (filter) {
+              if (option.label.includes(filter)) {
+                return (
+                  <SelectOption key={i} selected={selected} onClick={onSelectOption}>
+                    {option.label}
+                  </SelectOption>
+                );
+              }
+              return;
+            }
+
+            return (
+              <SelectOption key={i} selected={selected} onClick={onSelectOption}>
+                {option.label}
+              </SelectOption>
+            );
+          })}
+        </SelectOptionsContainer>
       </SelectContainer>
+      {error && <InputErrorMessage>{error}</InputErrorMessage>}
     </SelectWrapper>
   );
 };
