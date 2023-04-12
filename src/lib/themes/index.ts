@@ -25,8 +25,25 @@ export const defaultTheme: DefaultTheme = {
 };
 
 export const themes: DefaultTheme[] = [
+  defaultTheme,
   {
     ...defaultTheme,
     name: 'lina',
+  },
+  {
+    fontSizes: defaultTheme.fontSizes,
+    colors: {
+      primary: '#8667EC',
+      secondary: '#6553BC',
+      tertiary: '#DAD2F2',
+      quaternary: '#EEEAFC',
+      background: '#F2F3F5',
+      black: '#212121',
+      darkGray: '#666666',
+      gray: '#9B9B9B',
+      lightGray: '#DFDFDF',
+      white: '#FDFDFD',
+    },
+    name: 'spi',
   },
 ];

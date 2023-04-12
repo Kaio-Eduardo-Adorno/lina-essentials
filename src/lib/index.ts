@@ -7,6 +7,12 @@ import { TextAreaProps } from './components/TextArea';
 export type IconType = typeof iconsList[number];
 export type { InputProps, SelectProps, TextAreaProps };
 
+//Providers
+export {
+  useTheme as useLinaEssentialsTheme,
+  default as LinaEssentialsThemeProvider,
+} from './provider/ThemeProvider';
+
 //Components
 export { PrimaryButton, SecondaryButton } from './components/Button';
 export { default as Icon } from './components/Icon';
