@@ -16,12 +16,12 @@ import {
 
 export interface SelectProps {
   label?: { text: string; tooltip?: string };
-  disabled: boolean;
-  readOnly: boolean;
-  searchable: boolean;
-  multi: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  searchable?: boolean;
+  multi?: boolean;
   options: { label: string; value: any }[];
-  selectedValue: any;
+  selectedValue?: any;
   error?: string;
   onChange: (v: any) => void;
   [x: string]: any;
