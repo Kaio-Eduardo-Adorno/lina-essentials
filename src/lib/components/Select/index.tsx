@@ -13,6 +13,7 @@ import {
   SelectOptionsContainer,
   SelectWrapper,
 } from './index.style';
+import useComponentVisible from '../../hooks/useComponentVisible';
 
 export interface SelectProps {
   label?: { text: string; tooltip?: string };
@@ -41,7 +42,7 @@ const Select = ({
   error,
   ...rest
 }: SelectProps) => {
-  const [open, setOpen] = useState(false);
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const [filter, setFilter] = useState('');
   const [currentOption, setCurrentOption] = useState<CurrentOptionType>(
     multi ? [] : { label: '', value: null },
@@ -79,22 +80,22 @@ const Select = ({
         </Label>
       )}
 
-      <SelectContainer>
+      <SelectContainer ref={ref}>
         <SelectInputContainer
-          onClick={() => setOpen(!open)}
+          onClick={() => setIsComponentVisible(!isComponentVisible)}
           disabled={disabled}
           readOnly={readOnly}
         >
           <SelectInput
             onChange={(e) => {
               setFilter(e.target.value);
-              setOpen(true);
+              setIsComponentVisible(true);
             }}
             placeholder='Selecione'
             search={searchable}
             disabled={disabled}
             readOnly={readOnly}
-            value={open ? filter : selectedLabels}
+            value={isComponentVisible ? filter : selectedLabels}
           />
           <SelectInputValue
             onChange={() => null}
@@ -104,10 +105,10 @@ const Select = ({
           />
           <Icon icon='chevron_down' size={22} />
         </SelectInputContainer>
-        <SelectOptionsContainer open={open}>
+        <SelectOptionsContainer open={isComponentVisible}>
           <SelectOption
             onClick={() => {
-              setOpen(false);
+              setIsComponentVisible(false);
               if (multi) {
                 setCurrentOption([]);
                 return;
@@ -120,7 +121,7 @@ const Select = ({
           {options.map((option, i) => {
             const onSelectOption = () => {
               setFilter('');
-              setOpen(false);
+              setIsComponentVisible(false);
               if (multi) {
                 if (Array.isArray(currentOption)) {
                   if (currentOption.findIndex((cOption) => option.value === cOption.value) !== -1) {
