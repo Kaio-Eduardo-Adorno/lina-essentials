@@ -23,6 +23,7 @@ export const InputWrapper = styled('div')`
   flex-direction: column;
   gap: 4px;
   position: relative;
+  width: 100%;
 `;
 InputWrapper.defaultProps = { theme: defaultTheme };
 
@@ -57,6 +58,8 @@ export const Input = styled('input')`
   background: none;
   outline: none;
   width: 100%;
+  min-height: 22px;
+  padding: 0;
   font-size: ${(props) => props.theme.fontSizes.default};
   color: ${(props) => props.theme.colors.darkGray};
   ::placeholder {
