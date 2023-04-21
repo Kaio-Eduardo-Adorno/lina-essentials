@@ -22,3 +22,4 @@ export { default as Select } from './components/Select';
 export { default as TextArea } from './components/TextArea';
 export { default as Tooltip } from './components/Tooltip';
 export { default as Table } from './components/Table';
+export { default as TreeSelect } from './components/TreeSelect';
