@@ -23,7 +23,11 @@ interface SelectInputContainerProps {
 export const SelectInputContainer = styled('div')<SelectInputContainerProps>`
   display: flex;
   background: ${(props) => props.theme.colors.white};
-  cursor: pointer;
+  cursor: ${(props) => {
+    if (props.disabled) return 'default';
+    if (props.readOnly) return 'text';
+    return 'pointer';
+  }};
   border-radius: 4px;
   padding: 8px 10px;
   gap: 4px;
@@ -39,6 +43,7 @@ SelectInputContainer.defaultProps = { theme: defaultTheme };
 
 export const SelectOptionsContainer = styled('div')<Props>`
   position: absolute;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   left: 0;

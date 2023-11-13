@@ -25,7 +25,7 @@ type TreeKeys = {
   notSelectable: string;
 };
 
-export interface SelectProps {
+export interface TreeSelectProps {
   label?: { text: string; tooltip?: string };
   disabled?: boolean;
   readOnly?: boolean;
@@ -75,6 +75,7 @@ function TreeOption({
       >
         {tree?.[keysToUse.childrens]?.length > 0 && (
           <TreeSelectOptionChevron
+            type='button'
             open={open}
             onClick={(e) => {
               e.stopPropagation();
@@ -125,7 +126,7 @@ const TreeSelect = ({
   keys,
   showFullLabel,
   ...rest
-}: SelectProps) => {
+}: TreeSelectProps) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const [filter, setFilter] = useState('');
   const [currentOption, setCurrentOption] = useState<CurrentOptionType>({

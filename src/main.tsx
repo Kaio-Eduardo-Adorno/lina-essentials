@@ -2,14 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import CustomThemeProvider from './lib/provider/ThemeProvider';
+
 import { themes } from './lib/themes';
+import { LinaEssentialsThemeProvider } from './lib';
 
 ReactDOM.render(
   <React.StrictMode>
-    <CustomThemeProvider themes={themes}>
+    <LinaEssentialsThemeProvider themes={themes}>
       <App />
-    </CustomThemeProvider>
+    </LinaEssentialsThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

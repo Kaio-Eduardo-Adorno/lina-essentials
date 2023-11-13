@@ -23,6 +23,7 @@ export const ModalWrapper = styled('div')<Props>`
   overflow: auto;
   opacity: ${(props) => (props.open ? '1' : '0')};
   pointer-events: ${(props) => (props.open ? 'all' : 'none')};
+  z-index: ${(props) => (props.open ? 'auto' : '-1')};
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity linear 0.25s;
   @media screen and (max-width: 576px) {

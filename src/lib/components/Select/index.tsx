@@ -95,7 +95,7 @@ const Select = ({
             search={searchable}
             disabled={disabled}
             readOnly={readOnly}
-            value={isComponentVisible ? filter : selectedLabels}
+            value={isComponentVisible && !readOnly && !disabled ? filter : selectedLabels}
           />
           <SelectInputValue
             onChange={() => null}
@@ -105,60 +105,64 @@ const Select = ({
           />
           <Icon icon='chevron_down' size={22} />
         </SelectInputContainer>
-        <SelectOptionsContainer open={isComponentVisible}>
-          <SelectOption
-            onClick={() => {
-              setIsComponentVisible(false);
-              if (multi) {
-                setCurrentOption([]);
-                return;
-              }
-              setCurrentOption({ label: '', value: null });
-            }}
-          >
-            Selecione
-          </SelectOption>
-          {options.map((option, i) => {
-            const onSelectOption = () => {
-              setFilter('');
-              setIsComponentVisible(false);
-              if (multi) {
-                if (Array.isArray(currentOption)) {
-                  if (currentOption.findIndex((cOption) => option.value === cOption.value) !== -1) {
-                    setCurrentOption(
-                      currentOption.filter((cOption) => option.value !== cOption.value),
-                    );
-                    return;
+        {!readOnly && !disabled && (
+          <SelectOptionsContainer open={isComponentVisible}>
+            <SelectOption
+              onClick={() => {
+                setIsComponentVisible(false);
+                if (multi) {
+                  setCurrentOption([]);
+                  return;
+                }
+                setCurrentOption({ label: '', value: null });
+              }}
+            >
+              Selecione
+            </SelectOption>
+            {options.map((option, i) => {
+              const onSelectOption = () => {
+                setFilter('');
+                setIsComponentVisible(false);
+                if (multi) {
+                  if (Array.isArray(currentOption)) {
+                    if (
+                      currentOption.findIndex((cOption) => option.value === cOption.value) !== -1
+                    ) {
+                      setCurrentOption(
+                        currentOption.filter((cOption) => option.value !== cOption.value),
+                      );
+                      return;
+                    }
+                    setCurrentOption([...currentOption, option]);
                   }
-                  setCurrentOption([...currentOption, option]);
+                  return;
+                }
+                setCurrentOption(option);
+              };
+
+              const selected = Array.isArray(currentOption)
+                ? currentOption.findIndex((cOption) => cOption.value === option.value) !== -1
+                : currentOption.value === option.value;
+
+              if (filter) {
+                if (option.label.includes(filter)) {
+                  return (
+                    <SelectOption key={i} selected={selected} onClick={onSelectOption}>
+                      {option.label}
+                    </SelectOption>
+                  );
                 }
                 return;
               }
-              setCurrentOption(option);
-            };
 
-            const selected = Array.isArray(currentOption)
-              ? currentOption.findIndex((cOption) => cOption.value === option.value) !== -1
-              : currentOption.value === option.value;
-
-            if (filter) {
-              if (option.label.includes(filter)) {
-                return (
-                  <SelectOption key={i} selected={selected} onClick={onSelectOption}>
-                    {option.label}
-                  </SelectOption>
-                );
-              }
-              return;
-            }
-
-            return (
-              <SelectOption key={i} selected={selected} onClick={onSelectOption}>
-                {option.label}
-              </SelectOption>
-            );
-          })}
-        </SelectOptionsContainer>
+              return (
+                <SelectOption key={i} selected={selected} onClick={onSelectOption}>
+                  {option.label}
+                </SelectOption>
+              );
+            })}
+          </SelectOptionsContainer>
+        )}
       </SelectContainer>
       {error && <InputErrorMessage>{error}</InputErrorMessage>}
     </SelectWrapper>

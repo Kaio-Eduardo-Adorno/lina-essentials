@@ -39,6 +39,7 @@ TreeSelectInputContainer.defaultProps = { theme: defaultTheme };
 
 export const TreeSelectOptionsContainer = styled('div')<Props>`
   position: absolute;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   left: 0;

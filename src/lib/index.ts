@@ -2,10 +2,11 @@ import { iconsList } from './components/Icon';
 import { InputProps } from './components/InputText';
 import { SelectProps } from './components/Select';
 import { TextAreaProps } from './components/TextArea';
+import { TreeSelectProps } from './components/TreeSelect';
 
 //Types
 export type IconType = typeof iconsList[number];
-export type { InputProps, SelectProps, TextAreaProps };
+export type { InputProps, SelectProps, TextAreaProps, TreeSelectProps };
 
 //Providers
 export {
